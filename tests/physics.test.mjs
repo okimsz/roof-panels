@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createState,readings,step,roofArea} from '../src/physics.js';
+test('U value follows series resistance and greater thickness reduces heat gain',()=>{const s=createState(),a=readings(s);assert.ok(Math.abs(a.u-1/(.14002+4))<1e-12);assert.ok(Math.abs(a.q-a.u*roofArea*(a.solair-s.room))<1e-9);s.thickness=300;assert.ok(readings(s).q<a.q);});
+test('material conductivity and temperature control heat gain',()=>{const s=createState(),a=readings(s);s.material='wool';assert.ok(readings(s).q>a.q);s.ambient=45;assert.ok(readings(s).q>a.q);s.room=100;assert.ok(readings(s).q<0);});
+test('exact room integration, baseline and pause',()=>{const s=createState();for(let i=0;i<600;i++)step(s,.1);assert.ok(s.room>26&&s.baseline>s.room);assert.ok(s.time>3599);s.paused=true;const before=JSON.stringify(s);step(s,.1);assert.equal(JSON.stringify(s),before);});

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SHELTER / Insulated roof studio</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo"
+        ><span class="roof-icon"></span>SHELTER<span class="slash">/</span></a
+      ><span class="header-note">BUILDING PHYSICS STUDIO</span
+      ><button id="guideButton">Model notes</button>
+    </header>
+    <main>
+      <section class="visual">
+        <div class="headline">
+          <div>
+            <p class="eyebrow">COMFORT STARTS ABOVE YOU</p>
+            <h1>A better roof.<br /><span>A cooler home.</span></h1>
+          </div>
+          <p class="lede">
+            Explore the invisible work<br />of insulated roof panels.
+          </p>
+        </div>
+        <div id="stage">
+          <div id="startup" role="status">Building your house…</div>
+          <div class="stage-top">
+            <div class="segmented">
+              <button data-mode="house" aria-pressed="true">The house</button
+              ><button data-mode="inside" aria-pressed="false">
+                Roof cutaway
+              </button>
+            </div>
+            <button id="heat" aria-pressed="true">Heat flow</button>
+          </div>
+          <div id="tags"></div>
+          <div class="compass" aria-hidden="true">N<span>↑</span></div>
+          <div class="stage-caption">
+            <span id="viewCaption"
+              >A complete home. Protection in every layer.</span
+            ><small>DRAG TO ROTATE · SCROLL TO ZOOM</small>
+          </div>
+        </div>
+        <div class="specs">
+          <div>
+            <span>ROOF HEAT GAIN</span><strong id="gain">—</strong
+            ><small>Heat entering through the roof</small>
+          </div>
+          <div>
+            <span>OVERALL U-VALUE</span><strong id="uvalue">—</strong
+            ><small>W/(m²·K) · lower is better</small>
+          </div>
+          <div>
+            <span>HEAT-FLUX REDUCTION</span><strong id="reduction">—</strong
+            ><small>Versus the same roof without a core</small>
+          </div>
+        </div>
+      </section>
+      <aside>
+        <div class="panel-title">
+          <span class="eyebrow">DESIGN YOUR ENVELOPE</span>
+          <h2>Make the layers count.</h2>
+        </div>
+        <div class="control">
+          <label for="ambient"
+            ><span>Outdoor temperature</span
+            ><output id="ambientOut">35 °C</output></label
+          ><input
+            id="ambient"
+            type="range"
+            min="25"
+            max="45"
+            step="1"
+            value="35"
+          />
+          <div class="range-labels"><span>25 °C</span><span>45 °C</span></div>
+        </div>
+        <div class="control">
+          <label for="thickness"
+            ><span>Insulation thickness</span
+            ><output id="thicknessOut">100 mm</output></label
+          ><input
+            id="thickness"
+            type="range"
+            min="50"
+            max="300"
+            step="10"
+            value="100"
+          />
+          <div class="range-labels"><span>50 mm</span><span>300 mm</span></div>
+        </div>
+        <div class="control materials">
+          <label for="material">Core material</label
+          ><select id="material">
+            <option value="pu">Polyurethane foam</option>
+            <option value="eps">Expanded polystyrene</option>
+            <option value="wool">Mineral wool</option>
+          </select>
+          <p id="materialNote">
+            A fine-cell foam with low thermal conductivity.
+          </p>
+          <div class="material-values">
+            <span>k <b id="conductivity">0.025</b><small>W/(m·K)</small></span
+            ><span>Core R <b id="rvalue">4.00</b><small>m²·K/W</small></span>
+          </div>
+        </div>
+        <section class="temperature">
+          <div class="temp-title">
+            <span>Inside your home</span><b id="roomTemp">26.0 °C</b>
+          </div>
+          <svg
+            id="chart"
+            viewBox="0 0 280 65"
+            role="img"
+            aria-label="Indoor temperature over simulated time: cyan insulated, orange uninsulated"
+          >
+            <path class="grid" d="M0 15H280M0 35H280M0 55H280" />
+            <path id="baselineLine" />
+            <path id="roomLine" />
+          </svg>
+          <div class="chart-legend">
+            <span><i></i>Insulated</span
+            ><span><i></i>No core <b id="baselineTemp">26.0 °C</b></span>
+          </div>
+          <p id="elapsed">0 min simulated · starts at 26 °C</p>
+        </section>
+        <details>
+          <summary>Sunlight & simulation</summary>
+          <label for="solar"
+            >Roof irradiance <output id="solarOut">600 W/m²</output></label
+          ><input
+            id="solar"
+            type="range"
+            min="0"
+            max="1000"
+            step="50"
+            value="600"
+          /><label for="speed">Time scale</label
+          ><select id="speed">
+            <option value="1">Real time</option>
+            <option value="60" selected>1 second = 1 minute</option>
+            <option value="300">1 second = 5 minutes</option>
+          </select>
+          <p>
+            Chart auto-scales its temperature axis. Both homes share the same
+            walls, weather, and internal gains.
+          </p>
+        </details>
+        <div class="actions">
+          <button id="pause">Pause</button
+          ><button id="reset">Restart study</button>
+        </div>
+        <p class="footnote">Illustrative thermal model · no air conditioning</p>
+      </aside>
+    </main>
+    <dialog id="guide">
+      <button id="closeGuide">Close</button>
+      <p class="eyebrow">SHELTER / MODEL NOTES</p>
+      <h2>Slow the heat. Keep the house.</h2>
+      <p>
+        Insulation resists conductive heat transfer. Increase the thickness or
+        choose a lower-conductivity material to reduce heat flowing through the
+        roof. In “Roof cutaway”, one section lifts to reveal the outer steel
+        skin, insulation core, and inner liner while the house stays in place.
+      </p>
+      <h3>Three controls, one experiment</h3>
+      <p>
+        Change outdoor temperature (25–45 °C), panel thickness (50–300 mm), and
+        core material. Cyan heat-flow markers show heat crossing the roof;
+        orange rays represent sunlight. Flow reverses when the roof loses heat.
+        Marker motion is illustrative, not air or refrigerant flow.
+      </p>
+      <h3>What the numbers mean</h3>
+      <p>
+        Core resistance R = d/k. Overall U = 1/(R<sub>outside</sub> + R<sub
+          >skins</sub
+        >
+        + R<sub>core</sub> + R<sub>inside</sub>). Roof heat gain Q = U A (T<sub
+          >sol-air</sub
+        >
+        − T<sub>room</sub>). Negative Q means heat leaves the house. Heat-flux
+        reduction compares both roofs at the same temperature difference; it is
+        not a whole-house energy saving.
+      </p>
+      <p>
+        Nominal roof area is 54.4 m² (6 × 8 m footprint with a 1.6 m ridge rise,
+        excluding overhangs). Two 0.5 mm steel skins use k = 50 W/(m·K). Surface
+        resistances are 0.04 and 0.10 m²·K/W. Representative dry core
+        conductivities: polyurethane 0.025, EPS 0.036, mineral wool 0.040
+        W/(m·K). Real products vary with density, moisture, temperature and
+        ageing.
+      </p>
+      <p>
+        Solar absorption is 0.55 and external heat transfer coefficient is 25
+        W/(m²·K), giving T<sub>sol-air</sub> = T<sub>outside</sub> + 0.55 G/25.
+        Long-wave sky exchange and roof thermal storage are omitted. Indoor
+        temperature follows C dT/dt = Q<sub>roof</sub> + 70(T<sub>outside</sub>
+        − T<sub>room</sub>) + 180 W, with effective thermal capacity C = 3 MJ/K.
+        The orange comparison uses the same model without core insulation.
+      </p>
+      <p>
+        This is an educational lumped model, not a building compliance
+        calculation. There is no HVAC, detailed weather, air leakage model,
+        thermal bridging, humidity or moisture simulation. The roof section is
+        lifted for visibility, but inspection does not change the thermal model.
+        With constant heating and no cooling, insulation slows heat entry; it
+        does not maintain a fixed indoor temperature.
+      </p>
+      <p>
+        References:
+        <a
+          href="https://www.open.edu/openlearn/nature-environment/energy-buildings/content-section-3.2.4"
+          target="_blank"
+          rel="noreferrer"
+          >Open University: conductivity and U-values</a
+        >
+        ·
+        <a
+          href="https://www.energy.gov/sites/prod/files/guide_to_home_insulation.pdf"
+          target="_blank"
+          rel="noreferrer"
+          >US DOE: home insulation</a
+        >.
+      </p>
+    </dialog>
+    <script src="src/errors.js"></script>
+    <script src="vendor/three.min.js"></script>
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>

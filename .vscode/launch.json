@@ -1,0 +1,1 @@
+{"version":"0.2.0","configurations":[{"name":"Shelter in Chrome","type":"chrome","request":"launch","url":"http://127.0.0.1:5176","webRoot":"${workspaceFolder}"}]}

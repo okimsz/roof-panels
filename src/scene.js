@@ -1,5 +1,5 @@
 import { cores } from "./physics.js";
-export function createScene(host) {
+export function createScene(host, onSelectLayer) {
   const T = window.THREE;
   if (!T) throw Error("Three.js is unavailable.");
   const scene = new T.Scene();
@@ -269,9 +269,12 @@ export function createScene(host) {
     ["Insulation core", "core"],
     ["Inner liner", "inner"],
   ]) {
-    const el = document.createElement("div");
+    const el = document.createElement("button");
     el.className = "tag";
     el.textContent = text;
+    el.dataset.layer = part;
+    el.setAttribute("aria-pressed", part === "core");
+    el.onclick = () => onSelectLayer(part);
     document.getElementById("tags").append(el);
     tags.push({ el, part });
   }
@@ -279,7 +282,7 @@ export function createScene(host) {
     showHeat = true,
     angle = 0.65,
     elevation = 0.5,
-    distance = 21,
+    distance = 24,
     spread = 0,
     phase = 0,
     drag = null;
@@ -329,9 +332,11 @@ export function createScene(host) {
   );
   const resize = new ResizeObserver(() => {
     const w = host.clientWidth,
-      h = host.clientHeight;
+      h = host.clientHeight - (window.innerWidth <= 900 ? 240 : 0);
     renderer.setSize(w, h);
     camera.aspect = w / h;
+    if (window.innerWidth > 900) camera.setViewOffset(w, h, 125, 0, w, h);
+    else camera.clearViewOffset();
     camera.updateProjectionMatrix();
   });
   resize.observe(host);
@@ -395,7 +400,10 @@ export function createScene(host) {
         .project(camera);
       tag.el.hidden = spread < 0.9 || point.z > 1;
       tag.el.style.left = (point.x * 0.5 + 0.5) * host.clientWidth + "px";
-      tag.el.style.top = (-point.y * 0.5 + 0.5) * host.clientHeight + "px";
+      tag.el.style.top =
+        (-point.y * 0.5 + 0.5) *
+          (host.clientHeight - (window.innerWidth <= 900 ? 240 : 0)) +
+        "px";
     }
     renderer.render(scene, camera);
     window.roofReady = true;

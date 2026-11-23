@@ -3,70 +3,77 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>SHELTER / Insulated roof studio</title>
+    <title>SHELTER / House explorer</title>
     <link rel="stylesheet" href="src/styles.css" />
   </head>
   <body>
     <header>
       <a href="#" class="logo"
-        ><span class="roof-icon"></span>SHELTER<span class="slash">/</span></a
-      ><span class="header-note">BUILDING PHYSICS STUDIO</span
-      ><button id="guideButton">Model notes</button>
+        ><span class="roof-icon"></span>SHELTER <span>/</span></a
+      ><span class="header-note">THE HOUSE EXPLORER</span>
+      <div class="header-actions">
+        <button id="heat" aria-pressed="true">Heat flow</button
+        ><button id="guideButton">Model notes</button>
+      </div>
     </header>
     <main>
-      <section class="visual">
-        <div class="headline">
-          <div>
-            <p class="eyebrow">COMFORT STARTS ABOVE YOU</p>
-            <h1>A better roof.<br /><span>A cooler home.</span></h1>
+      <section id="stage" aria-label="Interactive 3D house">
+        <div id="startup" role="status">Building your house…</div>
+        <div class="scene-title">
+          <p class="eyebrow">COMFORT, BY DESIGN</p>
+          <h1>Every layer matters.</h1>
+          <p>Explore the roof. Shape the comfort within.</p>
+        </div>
+        <div id="tags"></div>
+        <aside class="layer-card" aria-label="Selected roof layer">
+          <p class="eyebrow">ROOF ASSEMBLY</p>
+          <div class="layer-tabs" aria-label="Select a roof layer">
+            <button data-layer="skin" aria-pressed="false">Skin</button
+            ><button data-layer="core" aria-pressed="true">Core</button
+            ><button data-layer="inner" aria-pressed="false">Liner</button>
           </div>
-          <p class="lede">
-            Explore the invisible work<br />of insulated roof panels.
+          <h2 id="layerTitle">Insulation core</h2>
+          <p id="layerDescription">
+            The thermal barrier between the sun-warmed roof and your home.
           </p>
-        </div>
-        <div id="stage">
-          <div id="startup" role="status">Building your house…</div>
-          <div class="stage-top">
-            <div class="segmented">
-              <button data-mode="house" aria-pressed="true">The house</button
-              ><button data-mode="inside" aria-pressed="false">
-                Roof cutaway
-              </button>
+          <p id="materialNote">
+            A fine-cell foam with low thermal conductivity.
+          </p>
+          <div class="material-values" id="coreValues">
+            <div>
+              <span>Conductivity · k</span><b id="conductivity">0.025</b
+              ><small>W/(m·K)</small>
             </div>
-            <button id="heat" aria-pressed="true">Heat flow</button>
+            <div>
+              <span>Core resistance · R</span><b id="rvalue">4.00</b
+              ><small>m²·K/W</small>
+            </div>
           </div>
-          <div id="tags"></div>
-          <div class="compass" aria-hidden="true">N<span>↑</span></div>
-          <div class="stage-caption">
-            <span id="viewCaption"
-              >A complete home. Protection in every layer.</span
-            ><small>DRAG TO ROTATE · SCROLL TO ZOOM</small>
+          <p id="skinValues" hidden>
+            Steel · 0.5 mm<br />Conductivity: 50 W/(m·K)
+          </p>
+          <button id="inspectLayer">Inspect this layer</button
+          ><small class="card-note"
+            >Select a label on the roof to learn more.</small
+          >
+        </aside>
+        <div class="stage-bottom">
+          <span id="viewCaption"
+            >A complete home. Protection in every layer.</span
+          >
+          <div class="segmented">
+            <button data-mode="house" aria-pressed="true">The house</button
+            ><button data-mode="inside" aria-pressed="false">
+              Roof cutaway
+            </button>
           </div>
-        </div>
-        <div class="specs">
-          <div>
-            <span>ROOF HEAT GAIN</span><strong id="gain">—</strong
-            ><small>Heat entering through the roof</small>
-          </div>
-          <div>
-            <span>OVERALL U-VALUE</span><strong id="uvalue">—</strong
-            ><small>W/(m²·K) · lower is better</small>
-          </div>
-          <div>
-            <span>HEAT-FLUX REDUCTION</span><strong id="reduction">—</strong
-            ><small>Versus the same roof without a core</small>
-          </div>
+          <small>DRAG TO ROTATE · SCROLL TO ZOOM</small>
         </div>
       </section>
-      <aside>
-        <div class="panel-title">
-          <span class="eyebrow">DESIGN YOUR ENVELOPE</span>
-          <h2>Make the layers count.</h2>
-        </div>
+      <section class="control-dock" aria-label="Experiment controls">
         <div class="control">
           <label for="ambient"
-            ><span>Outdoor temperature</span
-            ><output id="ambientOut">35 °C</output></label
+            >Outdoor temperature <output id="ambientOut">35 °C</output></label
           ><input
             id="ambient"
             type="range"
@@ -79,8 +86,7 @@
         </div>
         <div class="control">
           <label for="thickness"
-            ><span>Insulation thickness</span
-            ><output id="thicknessOut">100 mm</output></label
+            >Panel thickness <output id="thicknessOut">100 mm</output></label
           ><input
             id="thickness"
             type="range"
@@ -91,45 +97,17 @@
           />
           <div class="range-labels"><span>50 mm</span><span>300 mm</span></div>
         </div>
-        <div class="control materials">
-          <label for="material">Core material</label
+        <div class="control">
+          <label for="material">Insulation material</label
           ><select id="material">
             <option value="pu">Polyurethane foam</option>
             <option value="eps">Expanded polystyrene</option>
             <option value="wool">Mineral wool</option>
           </select>
-          <p id="materialNote">
-            A fine-cell foam with low thermal conductivity.
-          </p>
-          <div class="material-values">
-            <span>k <b id="conductivity">0.025</b><small>W/(m·K)</small></span
-            ><span>Core R <b id="rvalue">4.00</b><small>m²·K/W</small></span>
-          </div>
         </div>
-        <section class="temperature">
-          <div class="temp-title">
-            <span>Inside your home</span><b id="roomTemp">26.0 °C</b>
-          </div>
-          <svg
-            id="chart"
-            viewBox="0 0 280 65"
-            role="img"
-            aria-label="Indoor temperature over simulated time: cyan insulated, orange uninsulated"
-          >
-            <path class="grid" d="M0 15H280M0 35H280M0 55H280" />
-            <path id="baselineLine" />
-            <path id="roomLine" />
-          </svg>
-          <div class="chart-legend">
-            <span><i></i>Insulated</span
-            ><span><i></i>No core <b id="baselineTemp">26.0 °C</b></span>
-          </div>
-          <p id="elapsed">0 min simulated · starts at 26 °C</p>
-        </section>
-        <details>
-          <summary>Sunlight & simulation</summary>
+        <div class="control">
           <label for="solar"
-            >Roof irradiance <output id="solarOut">600 W/m²</output></label
+            >Solar intensity <output id="solarOut">600 W/m²</output></label
           ><input
             id="solar"
             type="range"
@@ -137,23 +115,57 @@
             max="1000"
             step="50"
             value="600"
-          /><label for="speed">Time scale</label
+          />
+          <div class="range-labels">
+            <span>Overcast</span><span>Bright sun</span>
+          </div>
+        </div>
+        <div class="session">
+          <label for="speed">Simulation speed</label
           ><select id="speed">
             <option value="1">Real time</option>
-            <option value="60" selected>1 second = 1 minute</option>
-            <option value="300">1 second = 5 minutes</option>
+            <option value="60" selected>1 s = 1 minute</option>
+            <option value="300">1 s = 5 minutes</option>
           </select>
-          <p>
-            Chart auto-scales its temperature axis. Both homes share the same
-            walls, weather, and internal gains.
-          </p>
-        </details>
-        <div class="actions">
-          <button id="pause">Pause</button
-          ><button id="reset">Restart study</button>
+          <div class="actions">
+            <button id="pause">Pause</button><button id="reset">Restart</button>
+          </div>
         </div>
-        <p class="footnote">Illustrative thermal model · no air conditioning</p>
-      </aside>
+      </section>
+      <footer class="metrics-bar">
+        <div class="metric">
+          <span>ROOF HEAT GAIN</span><strong id="gain">—</strong
+          ><small>Heat entering the home</small>
+        </div>
+        <div class="metric">
+          <span>OVERALL U-VALUE</span><strong id="uvalue">—</strong
+          ><small>W/(m²·K) · lower is better</small>
+        </div>
+        <div class="metric">
+          <span>HEAT-FLUX REDUCTION</span><strong id="reduction">—</strong
+          ><small>Compared with no core</small>
+        </div>
+        <div class="metric indoor">
+          <span>INDOOR TEMPERATURE</span><strong id="roomTemp">26.0 °C</strong
+          ><small id="elapsed">0 min simulated · starts at 26 °C</small>
+        </div>
+        <div class="trend">
+          <div class="chart-legend">
+            <span>Insulated</span
+            ><span>No core <b id="baselineTemp">26.0 °C</b></span>
+          </div>
+          <svg
+            id="chart"
+            viewBox="0 0 280 65"
+            role="img"
+            aria-label="Indoor temperature comparison"
+          >
+            <path class="grid" d="M0 15H280M0 35H280M0 55H280" />
+            <path id="baselineLine" />
+            <path id="roomLine" /></svg
+          ><small>Temperature trend · illustrative model</small>
+        </div>
+      </footer>
     </main>
     <dialog id="guide">
       <button id="closeGuide">Close</button>

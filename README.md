@@ -10,6 +10,11 @@ Alternatively, create a Render Blueprint using the included `render.yaml`.
 
 A complete furnished house with a landscaped plot, pitched sandwich-panel roof, interactive roof section, heat-flow markers, and an educational thermal comparison. Navy/cyan architecture-inspired interface. All assets and Three.js are local.
 
+The immersive explorer layout places the full-width house above a control dock
+and metrics strip. Select Skin, Core, or Liner in the floating layer card, or
+click a label in the roof cutaway. On mobile, the layer card sits below the scene.
+Outdoor temperature changes the cool-to-warm tint; solar intensity changes lighting.
+
 ## VS Code
 Open this folder with Node.js 20+ installed. No npm install required.
 

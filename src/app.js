@@ -4,7 +4,39 @@ const $ = (id) => document.getElementById(id);
 let state = createState(),
   history = [[0, 26, 26]],
   lastSample = 0;
-const view = createScene($("stage"));
+const layerInfo = {
+  skin: [
+    "Outer steel skin",
+    "The weather-facing metal surface absorbs sunlight and protects the insulation beneath it.",
+  ],
+  core: [
+    "Insulation core",
+    "The thermal barrier between the sun-warmed roof and your home.",
+  ],
+  inner: [
+    "Inner liner",
+    "The room-facing steel sheet finishes the underside and encloses the insulating core.",
+  ],
+};
+function selectLayer(layer) {
+  $("layerTitle").textContent = layerInfo[layer][0];
+  $("layerDescription").textContent = layerInfo[layer][1];
+  $("coreValues").hidden = layer !== "core";
+  $("materialNote").hidden = layer !== "core";
+  $("skinValues").hidden = layer === "core";
+  document
+    .querySelectorAll("[data-layer]")
+    .forEach((b) => b.setAttribute("aria-pressed", b.dataset.layer === layer));
+}
+const view = createScene($("stage"), selectLayer);
+document.querySelectorAll(".layer-tabs [data-layer]").forEach(
+  (b) =>
+    (b.onclick = () => {
+      selectLayer(b.dataset.layer);
+      mode("inside");
+    }),
+);
+$("inspectLayer").onclick = () => mode("inside");
 function controls() {
   $("ambientOut").textContent = state.ambient + " °C";
   $("thicknessOut").textContent = state.thickness + " mm";

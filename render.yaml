@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: roof-panels
+    runtime: static
+    branch: main
+    buildCommand: npm run build
+    staticPublishPath: ./dist

@@ -1,5 +1,13 @@
 # SHELTER / Insulated roof studio
 
+## Deploy on Render
+
+Create a Static Site connected to this repository, using branch `main`.
+Leave Root Directory blank, set Build Command to `npm run build`, and Publish
+Directory to `dist`. No start command or environment variables are required.
+The build produces `dist/index.html` for hosting alongside the offline HTML.
+Alternatively, create a Render Blueprint using the included `render.yaml`.
+
 A complete furnished house with a landscaped plot, pitched sandwich-panel roof, interactive roof section, heat-flow markers, and an educational thermal comparison. Navy/cyan architecture-inspired interface. All assets and Three.js are local.
 
 ## VS Code

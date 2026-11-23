@@ -42,7 +42,14 @@ function controls() {
   $("thicknessOut").textContent = state.thickness + " mm";
   $("solarOut").textContent = state.solar + " W/m²";
   $("materialNote").textContent = cores[state.material].note;
+  for (const id of ["ambient", "thickness", "solar"]) {
+    const slider = $(id);
+    const progress = (Number(slider.value) - Number(slider.min)) /
+      (Number(slider.max) - Number(slider.min)) * 100;
+    slider.style.setProperty("--progress", `${progress}%`);
+  }
 }
+controls();
 for (const id of ["ambient", "thickness", "material", "solar", "speed"])
   $(id).addEventListener("input", () => {
     state[id] = id === "material" ? $(id).value : Number($(id).value);

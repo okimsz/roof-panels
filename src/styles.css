@@ -286,10 +286,58 @@ output {
   font-variant-numeric: tabular-nums;
 }
 input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
   width: 100%;
-  height: 5px;
-  accent-color: var(--cyan);
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
   margin: 0;
+  --slider-color: var(--cyan);
+  --progress: 0%;
+}
+#ambient, #solar { --slider-color: #f4ba86; }
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 99px;
+  background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) var(--progress), #304b60 var(--progress), #304b60 100%);
+  box-shadow: inset 0 1px 2px #06152355;
+}
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -7px;
+  border-radius: 50%;
+  border: 4px solid #e9f7f5;
+  background: var(--slider-color);
+  box-shadow: 0 2px 6px #05111b88;
+}
+input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 99px;
+  background: #304b60;
+}
+input[type="range"]::-moz-range-progress {
+  height: 8px;
+  border-radius: 99px;
+  background: var(--slider-color);
+}
+input[type="range"]::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 4px solid #e9f7f5;
+  background: var(--slider-color);
+  box-shadow: 0 2px 6px #05111b88;
+}
+input[type="range"]:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 6px #d6f8ee22;
+}
+input[type="range"]:active::-moz-range-thumb {
+  box-shadow: 0 0 0 6px #d6f8ee22;
 }
 .range-labels {
   display: flex;

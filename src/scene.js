@@ -18,7 +18,19 @@ export function createScene(host) {
     window.roofFail("Graphics context lost. Reload the page.");
   });
   const camera = new T.PerspectiveCamera(39, 1, 0.1, 120);
-  scene.add(new T.HemisphereLight(0xe7f5ff, 0x41534e, 2.4));
+  const daylight = new T.HemisphereLight(0xe7f5ff, 0x41534e, 2.4);
+  scene.add(daylight);
+  const weatherColors = {
+    coolSky: new T.Color("#87acc6"),
+    warmSky: new T.Color("#d7af83"),
+    coolSun: new T.Color("#e0f1ff"),
+    warmSun: new T.Color("#ffd09a"),
+    coolAmbient: new T.Color("#c5e3ff"),
+    warmAmbient: new T.Color("#ffe5c3"),
+  };
+  const skyTarget = new T.Color();
+  const sunTarget = new T.Color();
+  const ambientTarget = new T.Color();
   const sun = new T.DirectionalLight(0xffe6c2, 3.2);
   sun.position.set(-8, 14, 7);
   sun.castShadow = true;
@@ -325,6 +337,25 @@ export function createScene(host) {
   resize.observe(host);
   function update(dt, state, r) {
     const ease = 1 - Math.exp(-dt * 5);
+    // Temperature tint is an educational cue; irradiance controls illumination.
+    // Keep diffuse light at zero irradiance so the house remains inspectable.
+    const warmth = T.MathUtils.clamp((state.ambient - 25) / 20, 0, 1);
+    const sunlight = T.MathUtils.clamp(state.solar / 1000, 0, 1);
+    skyTarget
+      .lerpColors(weatherColors.coolSky, weatherColors.warmSky, warmth)
+      .multiplyScalar(0.65 + 0.35 * sunlight);
+    sunTarget.lerpColors(weatherColors.coolSun, weatherColors.warmSun, warmth);
+    ambientTarget.lerpColors(
+      weatherColors.coolAmbient,
+      weatherColors.warmAmbient,
+      warmth,
+    );
+    scene.background.lerp(skyTarget, ease);
+    scene.fog.color.copy(scene.background);
+    sun.color.lerp(sunTarget, ease);
+    daylight.color.lerp(ambientTarget, ease);
+    sun.intensity += (4.2 * sunlight - sun.intensity) * ease;
+    daylight.intensity += (1.5 + 1.2 * sunlight - daylight.intensity) * ease;
     spread += ((mode === "inside" ? 1 : 0) - spread) * ease;
     front.visible = spread < 0.5;
     coreMat.color.setHex(cores[state.material].color);

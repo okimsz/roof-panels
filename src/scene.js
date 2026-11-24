@@ -233,7 +233,7 @@ export function createScene(host, onSelectLayer) {
   for (let i = 0; i < 18; i++) {
     const arrow = mesh(
       new T.ConeGeometry(0.075, 0.25, 8),
-      new T.MeshBasicMaterial({ color: "#83fff0" }),
+      new T.MeshBasicMaterial({ color: "#ff2020", toneMapped: false }),
       scene,
     );
     heatMarkers.push({

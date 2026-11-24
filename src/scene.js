@@ -232,7 +232,7 @@ export function createScene(host, onSelectLayer) {
   const heatMarkers = [];
   for (let i = 0; i < 18; i++) {
     const arrow = mesh(
-      new T.ConeGeometry(0.075, 0.25, 8),
+      new T.ConeGeometry(0.11, 0.25, 8),
       new T.MeshBasicMaterial({ color: "#ff2020", toneMapped: false }),
       scene,
     );
@@ -374,15 +374,14 @@ export function createScene(host, onSelectLayer) {
     ridge.visible = mode === "house";
     if (!state.paused) phase += dt * 0.35;
     // Width encodes heat-flux magnitude; keep length constant for comparison.
-    const arrowWidth = T.MathUtils.clamp(0.35 + Math.abs(r.flux) * 0.22, 0.35, 3.5);
+    const arrowWidth = 0.35 + Math.abs(r.flux) * 0.27;
     for (const h of heatMarkers) {
       const t = (phase + h.offset) % 1;
       const travel = r.q >= 0 ? t : 1 - t;
       h.arrow.position.set(h.x, 5.3 - travel * 3.2, h.z);
       h.arrow.rotation.z = r.q >= 0 ? Math.PI : 0;
       h.arrow.visible = showHeat && Math.abs(r.q) > 1;
-      const width = T.MathUtils.lerp(h.arrow.scale.x, arrowWidth, ease);
-      h.arrow.scale.set(width, 1.6, width);
+      h.arrow.scale.set(arrowWidth, 1.6, arrowWidth);
     }
     for (const [i, ray] of rays.entries()) {
       ray.visible = showHeat && state.solar > 0;

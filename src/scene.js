@@ -373,13 +373,16 @@ export function createScene(host, onSelectLayer) {
     ridge.position.y = 4.8 + d;
     ridge.visible = mode === "house";
     if (!state.paused) phase += dt * 0.35;
+    // Width encodes heat-flux magnitude; keep length constant for comparison.
+    const arrowWidth = T.MathUtils.clamp(0.35 + Math.abs(r.flux) * 0.22, 0.35, 3.5);
     for (const h of heatMarkers) {
       const t = (phase + h.offset) % 1;
       const travel = r.q >= 0 ? t : 1 - t;
       h.arrow.position.set(h.x, 5.3 - travel * 3.2, h.z);
       h.arrow.rotation.z = r.q >= 0 ? Math.PI : 0;
       h.arrow.visible = showHeat && Math.abs(r.q) > 1;
-      h.arrow.scale.setScalar(Math.min(1.25, 0.4 + Math.abs(r.flux) / 12));
+      const width = T.MathUtils.lerp(h.arrow.scale.x, arrowWidth, ease);
+      h.arrow.scale.set(width, 1.6, width);
     }
     for (const [i, ray] of rays.entries()) {
       ray.visible = showHeat && state.solar > 0;
